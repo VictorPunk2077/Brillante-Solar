@@ -24,9 +24,9 @@ export default function Footer() {
               Transformando la manera en que México consume energía. Soluciones renovables, eficientes y rentables.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="text-slate-400 hover:text-primary transition-colors"><Facebook className="w-5 h-5"/></a>
-              <a href="#" className="text-slate-400 hover:text-primary transition-colors"><Instagram className="w-5 h-5"/></a>
-              <a href="#" className="text-slate-400 hover:text-primary transition-colors"><Twitter className="w-5 h-5"/></a>
+              <span className="text-slate-600 opacity-50 cursor-not-allowed"><Facebook className="w-5 h-5"/></span>
+              <span className="text-slate-600 opacity-50 cursor-not-allowed"><Instagram className="w-5 h-5"/></span>
+              <span className="text-slate-600 opacity-50 cursor-not-allowed"><Twitter className="w-5 h-5"/></span>
             </div>
           </div>
 
@@ -58,11 +58,19 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-primary shrink-0" />
-                <span>+52 55 1234 5678</span>
+                <div className="flex flex-col">
+                  <a href="tel:+524311245164" className="hover:text-primary transition-colors">Oficina: 431 124 5164</a>
+                  <a href="tel:+524311088145" className="hover:text-primary transition-colors">Móvil: 431 108 8145</a>
+                </div>
               </li>
-              <li className="flex items-center gap-3">
-                <Mail className="w-5 h-5 text-primary shrink-0" />
-                <span>hola@solbrillante.mx</span>
+              <li className="flex flex-col gap-2">
+                <div className="flex items-center gap-3">
+                  <Mail className="w-5 h-5 text-primary shrink-0" />
+                  <a href="mailto:contacto@solbrillantemx.com" className="hover:text-primary transition-colors">contacto@solbrillantemx.com</a>
+                </div>
+                <div className="flex items-center gap-3 ml-8">
+                  <a href="mailto:info@solbrillantemx.com" className="hover:text-primary transition-colors">info@solbrillantemx.com</a>
+                </div>
               </li>
             </ul>
           </div>

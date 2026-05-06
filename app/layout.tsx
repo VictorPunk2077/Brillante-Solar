@@ -17,6 +17,9 @@ const roboto = Roboto({
 export const metadata: Metadata = {
   title: 'Sol Brillante | Energía Pura',
   description: 'Ahorra energía con el poder del sol. Instalación de paneles solares residenciales y comerciales.',
+  icons: {
+    icon: 'https://i.postimg.cc/05FrJ4z8/sol-brillante-logo.jpg',
+  },
 };
 
 export default function RootLayout({children}: {children: React.ReactNode}) {

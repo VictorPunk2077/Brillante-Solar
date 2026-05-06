@@ -63,14 +63,9 @@ export default function Footer() {
                   <a href="tel:+524311088145" className="hover:text-primary transition-colors">Móvil: 431 108 8145</a>
                 </div>
               </li>
-              <li className="flex flex-col gap-2">
-                <div className="flex items-center gap-3">
-                  <Mail className="w-5 h-5 text-primary shrink-0" />
-                  <a href="mailto:contacto@solbrillantemx.com" className="hover:text-primary transition-colors">contacto@solbrillantemx.com</a>
-                </div>
-                <div className="flex items-center gap-3 ml-8">
-                  <a href="mailto:info@solbrillantemx.com" className="hover:text-primary transition-colors">info@solbrillantemx.com</a>
-                </div>
+              <li className="flex items-center gap-3">
+                <Mail className="w-5 h-5 text-primary shrink-0" />
+                <a href="mailto:contacto@solbrillantemx.com" className="hover:text-primary transition-colors">contacto@solbrillantemx.com</a>
               </li>
             </ul>
           </div>

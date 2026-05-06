@@ -9,6 +9,9 @@ export default function SavingsCalculator() {
   const [zone, setZone] = useState('centro');
   const [panelType, setPanelType] = useState('monocristalino');
   const [projectType, setProjectType] = useState<'hogar' | 'negocio' | 'industria'>('hogar');
+  const [nombre, setNombre] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
+  const [correo, setCorreo] = useState('');
 
   useEffect(() => {
     setMounted(true);
@@ -34,6 +37,34 @@ export default function SavingsCalculator() {
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', maximumFractionDigits: 0 }).format(value);
+  };
+
+  const sendBudget = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('/api/send-budget', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nombre,
+          whatsapp,
+          correo,
+          expenses: formatCurrency(expense),
+          zone,
+          panelType,
+          projectType,
+        }),
+      });
+      if (response.ok) {
+        alert('Cotización enviada con éxito');
+      } else {
+        alert('Error al enviar la cotización');
+      }
+    } catch (error) {
+      alert('Error en el envío');
+    }
   };
 
   return (
@@ -148,7 +179,7 @@ export default function SavingsCalculator() {
             <h4 className="font-bold text-gray-900 text-2xl mb-2">Recibe tu presupuesto</h4>
             <p className="text-gray-500 text-sm mb-8">Completa tus datos para enviarte la cotización detallada a tu correo y WhatsApp.</p>
 
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <form className="space-y-6" onSubmit={sendBudget}>
               
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-3 block">Tipo de Proyecto</label>
@@ -182,17 +213,17 @@ export default function SavingsCalculator() {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">Nombre Completo</label>
-                <input type="text" placeholder="Ej. Juan Pérez" className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-gray-400 bg-gray-50/50" required />
+                <input type="text" placeholder="Ej. Juan Pérez" value={nombre} onChange={e => setNombre(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-gray-400 bg-gray-50/50" required />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">WhatsApp</label>
-                <input type="tel" placeholder="Ej. 55 1234 5678" className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-gray-400 bg-gray-50/50" required />
+                <input type="tel" placeholder="Ej. 55 1234 5678" value={whatsapp} onChange={e => setWhatsapp(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-gray-400 bg-gray-50/50" required />
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">Correo Electrónico</label>
-                <input type="email" placeholder="tu@correo.com" className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-gray-400 bg-gray-50/50" required />
+                <input type="email" placeholder="tu@correo.com" value={correo} onChange={e => setCorreo(e.target.value)} className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all placeholder:text-gray-400 bg-gray-50/50" required />
               </div>
 
               <div>

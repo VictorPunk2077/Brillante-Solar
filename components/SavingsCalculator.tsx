@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Home, Building2, Factory, UploadCloud, Zap } from 'lucide-react';
+import { Home, Building2, Factory, UploadCloud, Zap, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function SavingsCalculator() {
   const [mounted, setMounted] = useState(false);
@@ -12,6 +12,8 @@ export default function SavingsCalculator() {
   const [nombre, setNombre] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [correo, setCorreo] = useState('');
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     setMounted(true);
@@ -41,6 +43,9 @@ export default function SavingsCalculator() {
 
   const sendBudget = async (e: React.FormEvent) => {
     e.preventDefault();
+    setStatus('loading');
+    setErrorMessage('');
+    
     try {
       const response = await fetch('/api/send-budget', {
         method: 'POST',
@@ -57,13 +62,22 @@ export default function SavingsCalculator() {
           projectType,
         }),
       });
+      
+      const data = await response.json();
+      
       if (response.ok) {
-        alert('Cotización enviada con éxito');
+        setStatus('success');
+        setNombre('');
+        setWhatsapp('');
+        setCorreo('');
+        setTimeout(() => setStatus('idle'), 5000);
       } else {
-        alert('Error al enviar la cotización');
+        setStatus('error');
+        setErrorMessage(data.error || 'Ocurrió un error al enviar tu información.');
       }
     } catch (error) {
-      alert('Error en el envío');
+      setStatus('error');
+      setErrorMessage('Ocurrió un error de conexión al enviar la cotización.');
     }
   };
 
@@ -244,10 +258,39 @@ export default function SavingsCalculator() {
                 </div>
               </div>
 
-              <button type="submit" className="w-full bg-secondary hover:brightness-95 text-white font-bold py-4 px-8 rounded-lg shadow-md transition-all flex justify-center items-center gap-2">
-                <Zap className="w-5 h-5" />
-                Recibir Presupuesto
+              <button 
+                type="submit" 
+                disabled={status === 'loading' || status === 'success'}
+                className="w-full bg-secondary hover:brightness-95 disabled:bg-gray-400 disabled:cursor-not-allowed text-white font-bold py-4 px-8 rounded-lg shadow-md transition-all flex justify-center items-center gap-2"
+              >
+                {status === 'loading' ? (
+                  <><Loader2 className="w-5 h-5 animate-spin" /> Procesando...</>
+                ) : status === 'success' ? (
+                  <><CheckCircle2 className="w-5 h-5" /> ¡Enviado exitosamente!</>
+                ) : (
+                  <><Zap className="w-5 h-5" /> Recibir Presupuesto</>
+                )}
               </button>
+
+              {status === 'success' && (
+                <div className="p-4 bg-green-50 border border-green-200 rounded-xl flex items-start gap-3 mt-4 text-green-800">
+                  <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" />
+                  <div className="text-sm">
+                    <p className="font-bold mb-1">¡Solicitud recibida!</p>
+                    <p>En breve nos pondremos en contacto contigo con tu presupuesto detallado.</p>
+                  </div>
+                </div>
+              )}
+
+              {status === 'error' && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3 mt-4 text-red-800">
+                  <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                  <div className="text-sm">
+                    <p className="font-bold mb-1">Error al enviar</p>
+                    <p>{errorMessage}</p>
+                  </div>
+                </div>
+              )}
 
             </form>
           </div>

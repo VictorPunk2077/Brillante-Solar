@@ -18,8 +18,8 @@ export async function POST(req: Request) {
   try {
     const { nombre, whatsapp, correo, expenses, zone, panelType, projectType } = await req.json();
 
-    const data = await getResend().emails.send({
-      from: 'Sol Brillante <contacto@solbrillantemx.com>',
+    const response = await getResend().emails.send({
+      from: 'Sol Brillante <onboarding@resend.dev>',
       to: 'contacto@solbrillantemx.com',
       subject: 'Nuevo presupuesto solicitado',
       html: `
@@ -34,7 +34,12 @@ export async function POST(req: Request) {
       `,
     });
 
-    return NextResponse.json(data);
+    if (response.error) {
+      console.error('Resend error:', response.error);
+      return NextResponse.json({ error: response.error.message }, { status: 400 });
+    }
+
+    return NextResponse.json(response.data);
   } catch (error) {
     return NextResponse.json({ error: String(error) }, { status: 500 });
   }
